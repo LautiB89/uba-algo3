@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <cmath>
+#include <algorithm>
 
 using namespace std;
 
@@ -97,8 +98,11 @@ void ms(int &n, int &sol, vector<int> &partial, vector<bool> &available, vector<
         diag0Sum = partialSums[0] + ((row == col) ? i : 0),
         diag1Sum = partialSums[1] + ((row+col == n-1) ? i : 0);
     
-    if (rowSum > magicN || colSum > magicN || diag0Sum > magicN || diag1Sum > magicN)
-      continue;
+    int last = n - 1;
+    if (rowSum > magicN || colSum > magicN || diag0Sum > magicN || diag1Sum > magicN ||
+        (row == last && colSum != magicN) || (col == last && rowSum != magicN) || 
+        (row == col && row == last && diag0Sum != magicN) || (col == 0 && row == last && diag1Sum != magicN))
+      continue; // podriamos contemplar qué elementos permiten sumar usando mi magicN - sumas parciales
     
     partialSums[2 + row] = rowSum; 
     partialSums[2 + n + col] = colSum;
@@ -117,13 +121,15 @@ void ms(int &n, int &sol, vector<int> &partial, vector<bool> &available, vector<
   }
 }
 
-int magic_sqr(int n) {
+void magic_sqr() {
+  int n;
+  cin >> n;
   vector<int> partialSol = {};
   vector<int> partialSums(n*2 + 2, 0);
   vector<bool> available(n*n + 1, true);
   int s = 0;
   ms(n, s, partialSol, available, partialSums);
-  return s;
+  return;
 }
 
 // Ejercicio 3
@@ -146,18 +152,21 @@ int sizeBoolVec(vector<bool> &solParcial) {
 }
 
 void showVec(const vector<bool> &vec) {
-  cout << "Nueva mejor solucion: {";
+  //cout << "Nueva mejor solucion: {";
+  cout << "{";
   for (int elem: vec)
     cout << elem << ", ";
   cout << "}" << endl;
 }
 
-void matSim(const vector<vector<int>> &M, const int &k, vector<bool> &solParcial, vector<bool> &solFinal, int &sumaFinal) {
+void matSim(const vector<vector<int>> &M, const int &k, vector<bool> &solParcial, 
+            vector<bool> &solFinal, int &sumaFinal, 
+            vector<int> &sumasParciales, int tamParcial) {
   int sizeParcial = sizeBoolVec(solParcial);
   if (sizeParcial == k) {
     int sumaParcial = sumaMatEnI(M, solParcial); 
+    showVec(solParcial);
     if (sumaParcial > sumaFinal) {
-      showVec(solParcial);
       cout << sumaParcial << endl;
       solFinal = solParcial;
       sumaFinal = sumaParcial;
@@ -165,22 +174,13 @@ void matSim(const vector<vector<int>> &M, const int &k, vector<bool> &solParcial
     return;
   }
   int rows = M.size();
-  for (int i = 0; i < rows; i++) {
-    if (solParcial[i])
+  for (int i = tamParcial + 1; i < rows ; i++) {
+    if (!solParcial[i])
       continue;
     
-    int sumaUsandoI = 0;
-    int sumaParcial = sumaMatEnI(M, solParcial); 
-    
-    for (int j = 0; j < rows; j++)
-      sumaUsandoI += M[i][j] * solParcial[j] * ((i != j) + 1);
-    
-    if (sumaParcial + sumaUsandoI <= sumaFinal)
-      continue;
-    
-    solParcial[i] = true;
-    matSim(M, k, solParcial, solFinal, sumaFinal);
     solParcial[i] = false;
+    matSim(M, k, solParcial, solFinal, sumaFinal, sumasParciales, i);
+    solParcial[i] = true;
   }
 }
 
@@ -193,12 +193,19 @@ void matriz_sim() {
   };
   int k;
   cin >> k;
-  vector<bool> solParcial(M.size(), false);
+  vector<bool> solParcial(M.size(), true);
   vector<bool> solFinal = {};
+  vector<int> sumasParciales = {};
+  for (auto vec: M) {
+    int sum = 0;
+    for (int elem: vec)
+      sum += elem;
+    sumasParciales.push_back(sum);
+  }
   int sumaFinal = -1;
-  matSim(M, k, solParcial, solFinal, sumaFinal);
+  matSim(M, k, solParcial, solFinal, sumaFinal, sumasParciales, -1);
 }
 
 int main() {
-  matriz_sim();
+  magic_sqr();
 }
