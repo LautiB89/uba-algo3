@@ -5,9 +5,9 @@ OUTPUT_FILENAME := app
 
 .PHONY: all clean
 
-bt: bt.cpp
+$(OUTPUT_PATH)/%: %.cpp
 	@mkdir -p $(OUTPUT_PATH)
-	$(CC) $(CPPFLAGS) $< -o $(OUTPUT_PATH)/$(OUTPUT_FILENAME)
+	$(CC) $(CPPFLAGS) $< -o $(OUTPUT_PATH)/$*_app
 
 clean:
 	rm -f *.o
