@@ -62,8 +62,11 @@ void ms(int &n, int &sol, vector<int> &partial, vector<bool> &available, vector<
         diag0Sum = partialSums[0] + ((row == col) ? i : 0),
         diag1Sum = partialSums[1] + ((row+col == n-1) ? i : 0);
     
-    if (rowSum > magicN || colSum > magicN || diag0Sum > magicN || diag1Sum > magicN)
-      continue;
+    int last = n - 1;
+    if (rowSum > magicN || colSum > magicN || diag0Sum > magicN || diag1Sum > magicN ||
+        (row == last && colSum != magicN) || (col == last && rowSum != magicN) || 
+        (row == col && row == last && diag0Sum != magicN) || (col == 0 && row == last && diag1Sum != magicN))
+      continue; // podriamos contemplar qué elementos permiten sumar usando mi magicN - sumas parciales
     
     partialSums[2 + row] = rowSum; 
     partialSums[2 + n + col] = colSum;
@@ -82,15 +85,17 @@ void ms(int &n, int &sol, vector<int> &partial, vector<bool> &available, vector<
   }
 }
 
-int magic_sqr(int n) {
+void magic_sqr() {
+  int n;
+  cin >> n;
   vector<int> partialSol = {};
   vector<int> partialSums(n*2 + 2, 0);
   vector<bool> available(n*n + 1, true);
   int s = 0;
   ms(n, s, partialSol, available, partialSums);
-  return s;
+  return;
 }
 
 int main() {
-  magic_sqr(4);
+  magic_sqr();
 }
