@@ -34,10 +34,10 @@ mgn(j, c) | (j < 0 || j > c) = -inf
                             mgn(j-1, c) )
 
 Usando esta formulacion de mgn, resolvemos el problema usando mgn(j, 0)
- */
+*/
 
-vector<int> p = {3,2,5,6};
-int n = 3;
+vector<int> p = {7,1,4,9};
+int n = 4;
 vector<vector<int>> memo(n+1, vector<int>(p.size() + 1, BOTTOM));
 // en realidad no necesitamos |p|, con |p|/2 alcanza
 
@@ -61,10 +61,13 @@ int mgnBottomUp(int dia, int cant) {
     // temporal: n² estados 
 
     vector<int> memoBU(n+1, BOTTOM);
-    for (int i = 1; i < dia; i++) {
-        for (int j = 1; j <= i; j++) {
-            memoBU[j]// ver qe hacer
+    for (int i = 1; i <= dia; i++) {
+        vector<int> lastMemo = memoBU;
+        memoBU[1] = max(lastMemo[0] - p[i-1], lastMemo[1]);
+        for (int j = 1; j < i; j++) {
+            // aca falta cambiar el limite, ver que rebota cuando llega a n/2
         }
+        memoBU[i] = max(lastMemo[0], lastMemo[1]);
     }
 }
 
