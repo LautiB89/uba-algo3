@@ -61,17 +61,24 @@ int mgnBottomUp(int dia, int cant) {
     // temporal: n² estados 
 
     vector<int> memoBU(n+1, BOTTOM);
+    vector<int> lastMemo = memoBU;
+    int nDiv2 = n/2, lim = 0;
     for (int i = 1; i <= dia; i++) {
-        vector<int> lastMemo = memoBU;
-        memoBU[1] = max(lastMemo[0] - p[i-1], lastMemo[1]);
-        for (int j = 1; j < i; j++) {
-            // aca falta cambiar el limite, ver que rebota cuando llega a n/2
-        }
-        memoBU[i] = max(lastMemo[0], lastMemo[1]);
+        lastMemo = memoBU;
+        memoBU[0] = max(lastMemo[0], lastMemo[1] + p[i]);
+        lim = nDiv2 - abs((i) - nDiv2) - 1;
+        // todo
+        // releer tranquilo y ver q garcha hace esto
+        for (int k = 1; k < lim; k++)
+            memoBU[i] = max(lastMemo[k-1] - p[i], max(lastMemo[k], lastMemo[k+1] + p[i]));
+        memoBU[lim] = max(lastMemo[lim], lastMemo[lim + 1] + p[i]);
+        showVec(memoBU);
     }
+    return memoBU[cant];
 }
 
 int main() {
     cout << mgnTopDown(n, 0) << endl;
     showMat(memo);
+    cout << "\n" << mgnBottomUp(n, 0) << endl;
 }
