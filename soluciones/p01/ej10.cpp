@@ -73,7 +73,7 @@ int pilaBU(int n){
             memoBU[k] = k > s[i-1] ?
                 oldMemo[k] :
                 max(oldMemo[k], oldMemo[k + w[i-1]] + 1);
-        }
+        }                
         printf("Suma maxima para i = %d es %d\n", i, subSum);
     }
     return memoBU[0];
