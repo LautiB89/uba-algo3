@@ -1,0 +1,24 @@
+{
+    "tasks": [
+        {
+            "label": "make cpp executable with g++ and Makefile",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "${fileBasenameNoExtension}"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "detail": "Mi propio task papá!",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "hide": true,
+        }
+    ],
+    "version": "2.0.0"
+    // tasks.json
+}

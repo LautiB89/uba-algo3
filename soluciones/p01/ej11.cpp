@@ -43,12 +43,12 @@ ops(i, k)
         pot = ops(i+1, k ^ vi)
 */
 
-vector<int> v = {3,1,5,2,1};
+vector<int> v = {3,7,1,2,1};
 int n = v.size(),
     w = 400;
 vector<vector<string>> memo(n+1, vector<string>(w+1, BOTTOM));
 
-string opsTP(int i, int k) {
+string opsTD(int i, int k) {
     // printf("i = %d, k = %d\n", i, k);
     if (i == n)
         return k == w ? "" : BOTTOM;    // para empezar a construir la solucion
@@ -56,9 +56,9 @@ string opsTP(int i, int k) {
         return BOTTOM;
 
     if (memo[i][k] == BOTTOM) {
-        string sum = opsTP(i+1, k + v[i]);
-        string mul = opsTP(i+1, k * v[i]);
-        string pot = opsTP(i+1, pow(k, v[i]));
+        string sum = opsTD(i+1, k + v[i]);
+        string mul = opsTD(i+1, k * v[i]);
+        string pot = opsTD(i+1, pow(k, v[i]));
         memo[i][k] = sum != BOTTOM ? SUM + sum :
                      mul != BOTTOM ? MUL + mul :
                      pot != BOTTOM ? POT + pot : BOTTOM;
@@ -142,7 +142,9 @@ string reconstruir() {
 }
 
 int main() {
-    cout << "Solucion final: " << opsBU(n, w) << endl;
+    printf("Mi vector: ");
+    showVec(v);
+    printf("Solucion final para n = %d y w = %d es : %d\nMi matriz:\n", n, w, opsBU(n, w));
     for (auto row: memoBU) {
         for (int i = 0; i < w+1; i++) {
             if (row[i])
