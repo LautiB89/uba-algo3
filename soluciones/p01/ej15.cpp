@@ -56,7 +56,7 @@ void separarCursos() {
                 B.push_back(i); sumB += cants[i];
             }
         }
-        else if (conectan[i][a]) {
+        else if (conectan[i][b]) {
             A.push_back(i); sumA += cants[i];
         } else {
             B.push_back(i); sumB += cants[i];
@@ -78,6 +78,8 @@ int test1() {
 
 int test2() {
     n = 8;
+    A = vector<int> (0);
+    B = vector<int> (0);
     conectan = vector<vector<bool>> (n+1, vector<bool>(n+1, false));
 
     conectan[1][2] = true;
@@ -100,6 +102,7 @@ int test2() {
 }
 
 int main() {
+    test1();
     test2();
     return 0;
 }

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include <string>
 #include <cmath>
@@ -26,13 +27,18 @@ Si es devolver la suma haciendola con el menor costo
 entonces hay que hacer sort y despues una suma
  */
 
-int suma(const vector<int>& v) {
-    int sum = 0;
-    for (int elem: v)
-        sum += elem;
-    return sum;
+int costo(const vector<int>& v) {
+    int sum = v[0], costo = 0;
+    for (int i = 1; i < v.size(); i++) {
+        sum = v[i] + sum;
+        costo += sum;
+    }
+    return costo;
 }
 
 int main() {
+    vector<int> v = {1, 2, 5};
+    sort(v.begin(), v.end());
+    printf("Costo: %d\n", costo(v));
     return 0;
 }
