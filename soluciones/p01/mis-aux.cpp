@@ -22,3 +22,13 @@ int vecSum(const vector<int> &V) {
     sum += num;
   return sum;
 }
+
+template<typename T>
+void espejar(const vector<vector<T>> &M) {
+  // sirve para hacer simetricas a matrices cuadradas
+  int rows = M.size(), cols = (rows > 0) ? M[0].size() : 0;
+  for (int i = 0; i < rows; i++) {
+    for (int j = i+1; j < cols; j++)
+      M[i][j] = M[j][i];
+  }
+}
