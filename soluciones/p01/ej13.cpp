@@ -24,7 +24,7 @@ int maxParejas(vector<int> h1, vector<int> h2) {
         else
             i2++;
     }
-    return res;    
+    return res;
 }
 
 void test1(){
