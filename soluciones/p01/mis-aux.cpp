@@ -5,13 +5,15 @@
 
 using namespace std;
 
-void showVec(const vector<int> &V) {
-  for (int elem: V)
-      cout << (elem < 0 ? "  " : "   ") << elem;
+template<typename T>
+void showVec(const vector<T> &V) {
+  for (auto elem: V)
+      cout << elem << "\t";
   cout << "\n";
 }
 
-void showMat(const vector<vector<int>> &M) {
+template<typename T>
+void showMat(const vector<vector<T>> &M) {
   for (auto row: M)
     showVec(row);
 }
@@ -24,11 +26,12 @@ int vecSum(const vector<int> &V) {
 }
 
 template<typename T>
-void espejar(const vector<vector<T>> &M) {
+void espejar(vector<vector<T>> &M) {
   // sirve para hacer simetricas a matrices cuadradas
   int rows = M.size(), cols = (rows > 0) ? M[0].size() : 0;
   for (int i = 0; i < rows; i++) {
-    for (int j = i+1; j < cols; j++)
-      M[i][j] = M[j][i];
+    for (int j = i+1; j < cols; j++) {
+      M[j][i] = M[i][j];
+    }
   }
 }
