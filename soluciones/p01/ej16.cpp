@@ -40,15 +40,18 @@ vector<bool> disponibles(n+1, true);
 
 void fiestaBT() {
     if (cant == 0) {
-        printf("Llegue a una hoja: \n");
-        showVec(parcial);
-        showVec(disponibles);
+        // printf("Llegue a una hoja: \n");
+        // showVec(parcial);
+        // showVec(disponibles);
         if (cantParcial >= cantFinal) {
-            printf("y es la mejor!!! p=%d, f=%d\n", cantParcial, cantFinal);
+            // printf("y es la mejor!!! p=%d, f=%d\n", cantParcial, cantFinal);
             final = parcial; cantFinal = cantParcial;
         }
         return;
     }
+
+    // poda
+    if (cantParcial + cant < cantFinal) return;
 
     // Saco w de la lista disponibles (W) (alguno disponible)
     int w = 0;
