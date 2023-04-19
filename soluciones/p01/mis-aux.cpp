@@ -12,6 +12,15 @@ void showVec(const vector<T> &V) {
   cout << "\n";
 }
 
+void showVec(const vector<bool> &V, bool ignoreZero = true) {
+  int n = V.size();
+  for (int i = ignoreZero; i < n; i++) {
+    if (V[i])
+      cout << i << "\t";
+  }
+  cout << "\n";
+}
+
 template<typename T>
 void showMat(const vector<vector<T>> &M) {
   for (auto row: M)

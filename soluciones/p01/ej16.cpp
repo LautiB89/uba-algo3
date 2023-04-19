@@ -29,48 +29,67 @@ fs({}, {1, 2, 3, 4, 5})
     fs({1}, {1, 2, 3, 4, 5})
 */ 
 
-int n;
-vector<vector<bool>> conflicto;
-vector<int> parcial = {};
-vector<int> final = {};
+int n = 5;
+int cant = n, cantParcial = 0, cantFinal = 0;
+vector<vector<bool>> conflicto(n+1, vector<bool> (n+1, false));
+vector<bool> parcial(n+1, false);
+vector<bool> final(n+1, false);
+vector<bool> disponibles(n+1, true);
 
-void fiestaBT(vector<int> disponibles) {
-    if (disponibles.empty()) {
-        if (parcial.size() > final.size())
-            final = parcial;
+// vector<bool> filtrarConflictos(const vector<bool> &C)
+
+void fiestaBT() {
+    if (cant == 0) {
+        printf("Llegue a una hoja: \n");
+        showVec(parcial);
+        showVec(disponibles);
+        if (cantParcial >= cantFinal) {
+            printf("y es la mejor!!! p=%d, f=%d\n", cantParcial, cantFinal);
+            final = parcial; cantFinal = cantParcial;
+        }
         return;
     }
 
-    int w = disponibles.back();
-    disponibles.pop_back();
-    fiestaBT(disponibles); // en este caso entra parcial sin tocar, y W sin w
-
-    auto it = disponibles.begin();
-    while (it != disponibles.end()) {
-        if (conflicto[*it][w]) {
-            disponibles.erase(it);
-        } else {
-            it++;
-        }
-    } // resolver este quilombo
+    // Saco w de la lista disponibles (W) (alguno disponible)
+    int w = 0;
+    for (int i = 1; i <= n && w == 0; i++) {
+        if (disponibles[i])
+            w = i;
+    }
+    disponibles[w] = false;
+    cant--;
+    fiestaBT(); // en este caso entra parcial sin tocar, y W sin w
     
-    fiestaBT(disponibles);
+    // Filtro disponibles
+    vector<bool> aux = disponibles;
+    for (int i = 1; i <= n; i++) {
+        disponibles[i] = aux[i] && !conflicto[w][i];
+    }
+    
+    // Agrego w a la solucion parcial
+    parcial[w] = true;
+    cantParcial++;
+    fiestaBT();
 
+    // Deshago mis cambios (importante por ser globales)
+    cant++;
+    disponibles = aux;
+    disponibles[w] = true;
+    parcial[w] = false;
+    cantParcial--;
+    
     return;
 }
 
-
 int main() {
-    n = 5;
-    vector<int> disponibles = {1,2,3,4,5};
-    conflicto = vector<vector<bool>> (n+1, vector<bool> (n+1, false));
     conflicto[1][2] = true;
     conflicto[2][3] = true;
     conflicto[3][4] = true;
     conflicto[4][5] = true;
-    espejar(conflicto);
 
-    fiestaBT(disponibles);
-    showVec(parcial);
+    espejar(conflicto);
+    // showMat(conflicto);
+    fiestaBT();
+    showVec(final);
     return 0;
 }
